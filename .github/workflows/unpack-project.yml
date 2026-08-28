@@ -20,7 +20,7 @@ jobs:
       - name: Unpack project archive
         run: |
           set -e
-          ARCHIVE="asateer-al-kora-safe-v2.zip"
+          ARCHIVE="asateer-al-kora-safe-v3.zip"
           test -f "$ARCHIVE"
           rm -rf /tmp/asateer-project
           mkdir -p /tmp/asateer-project

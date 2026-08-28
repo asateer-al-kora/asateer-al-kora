@@ -14,6 +14,9 @@
         "projectId": "29a8bb5b-2daa-4c34-8658-c3b845cca05a"
       }
     },
+    "android": {
+      "package": "com.asser96.asateeralkora"
+    },
     "ios": {
       "supportsTablet": true
     },

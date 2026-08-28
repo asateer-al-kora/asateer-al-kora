@@ -1,0 +1,42 @@
+name: Unpack Asateer Al Kora project
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'Upload safe Asateer Al Kora project archive') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Unpack project archive
+        run: |
+          set -e
+          test -f asateer-al-kora-safe-upload.zip
+          rm -rf /tmp/asateer-project
+          mkdir -p /tmp/asateer-project
+          unzip -q asateer-al-kora-safe-upload.zip -d /tmp/asateer-project
+          test -f /tmp/asateer-project/project/app.json
+          cp -R /tmp/asateer-project/project/. .
+          rm -rf /tmp/asateer-project asateer-al-kora-safe-upload.zip
+
+      - name: Commit extracted project
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No extracted files to commit"
+            exit 0
+          fi
+          git commit -m "Extract Asateer Al Kora project files"
+          git push

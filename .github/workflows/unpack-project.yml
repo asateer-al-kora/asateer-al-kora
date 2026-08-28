@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   unpack:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'Upload safe Asateer Al Kora project archive') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'Add files via upload') || contains(github.event.head_commit.message, 'Upload safe Asateer Al Kora project archive') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,13 +20,19 @@ jobs:
       - name: Unpack project archive
         run: |
           set -e
-          test -f asateer-al-kora-safe-upload.zip
+          ARCHIVE="asateer-al-kora-safe-v2.zip"
+          test -f "$ARCHIVE"
           rm -rf /tmp/asateer-project
           mkdir -p /tmp/asateer-project
-          unzip -q asateer-al-kora-safe-upload.zip -d /tmp/asateer-project
-          test -f /tmp/asateer-project/project/app.json
-          cp -R /tmp/asateer-project/project/. .
-          rm -rf /tmp/asateer-project asateer-al-kora-safe-upload.zip
+          unzip -q "$ARCHIVE" -d /tmp/asateer-project
+          if test -f /tmp/asateer-project/project/app.json; then
+            SOURCE_DIR=/tmp/asateer-project/project
+          else
+            SOURCE_DIR=/tmp/asateer-project
+          fi
+          test -f "$SOURCE_DIR/app.json"
+          cp -R "$SOURCE_DIR/." .
+          rm -rf /tmp/asateer-project "$ARCHIVE"
 
       - name: Commit extracted project
         run: |

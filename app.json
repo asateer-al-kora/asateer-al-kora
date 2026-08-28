@@ -30,7 +30,8 @@
       "expo-font",
       "expo-web-browser",
       "expo-secure-store",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-dev-client"
     ],
     "experiments": {
       "typedRoutes": true
